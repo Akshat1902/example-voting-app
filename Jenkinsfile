@@ -11,7 +11,7 @@ pipeline{
                 echo "Running Job: ${env.JOB_NAME}\n build: ${env.BUILD_ID}"
                 // sh 'docker-compose --version'
                 // sh 'docker info'
-                sh 'docker-compose -d up'
+                sh 'docker-compose up -d'
                 sh 'docker ps -a'
                 // sh 'chmod +x run.sh'
                 // sh './run.sh'
