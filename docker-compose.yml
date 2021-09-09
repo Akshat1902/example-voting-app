@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+
+  db:
+    image: postgres:9.4
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+
+  voter:
+    image: prabhavagrawal/vote-app
+    container_name: vote 
+    ports:
+      - "5000:80"
+    links:
+      - "redis:redis"
+
+  result:
+    image: prabhavagrawal/result-app
+    container_name: result
+    ports:
+      - "5001:80"
+    links:
+      - "redis:redis"
+      - "db:db"
+      
+
+  worker:
+    image: prabhavagrawal/worker-app
+    container_name: worker 
+    links:
+      - "redis:redis"
+      - "db:db"
+
