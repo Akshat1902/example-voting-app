@@ -9,6 +9,7 @@ pipeline{
         stage('Run Docker Compose'){
             steps{
                 echo "Running Job: ${env.JOB_NAME}\n build: ${env.BUILD_ID}"
+                sh 'ls'
                 sh 'docker-compose up'
             }
         }
