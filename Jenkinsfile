@@ -10,6 +10,7 @@ pipeline{
             steps{
                 echo "Running Job: ${env.JOB_NAME}\n build: ${env.BUILD_ID}"
                 sh 'docker-compose --version'
+                sh 'docker info'
                 sh 'docker-compose up'
             }
         }
