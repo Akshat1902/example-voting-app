@@ -13,7 +13,7 @@ pipeline{
                 // sh 'docker info'
                 // sh 'docker-compose up'
                 // sh 'docker ps -a'
-                sh 'sudo chmod +x run.sh'
+                sh 'chmod +x run.sh'
                 sh './run.sh'
             }
         }
