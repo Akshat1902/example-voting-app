@@ -9,7 +9,7 @@ pipeline{
 
         stage('Build images by dockerfiles'){
             steps{
-                sh 'cd vote'
+                dir('vote')
                 sh 'pwd'
                 sh 'docker build -t akshat1711/vote-app .'
                 sh 'cd ..'
