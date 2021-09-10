@@ -7,23 +7,37 @@ pipeline{
             }
         }
 
-        stage('Build images by dockerfiles'){
-            steps{
-                dir('vote')
-                sh 'pwd'
-                sh 'docker build -t akshat1711/vote-app .'
-                sh 'cd ..'
-                sh 'cd result'
-                sh 'docker build -t akshat1711/result-app .'
-                sh 'cd ..'
+        stage('SonarQube analysis') {
+         steps {
+            script {
+              // requires SonarQube Scanner 2.8+
+              scannerHome = tool 'sonarqube'
             }
+            withSonarQubeEnv('sonarqube') {
+             sh "${scannerHome}/bin/sonar-scanner \
+             -D sonar.login=admin \
+             -D sonar.password=password123 \
+             -D sonar.projectKey=sonarqube"
+            }
+          }
         }
+        // stage('Build images by dockerfiles'){
+        //     steps{
+        //         dir('vote')
+        //         sh 'pwd'
+        //         sh 'docker build -t akshat1711/vote-app .'
+        //         sh 'cd ..'
+        //         sh 'cd result'
+        //         sh 'docker build -t akshat1711/result-app .'
+        //         sh 'cd ..'
+        //     }
+        // }
 
-        stage('Remove old containers if any'){
-            steps{
-                sh 'docker rm redis db vote worker result'
-            }
-        }
+        // stage('Remove old containers if any'){
+        //     steps{
+        //         sh 'docker rm redis db vote worker result'
+        //     }
+        // }
         
         stage('Run Docker Compose'){
             steps{
