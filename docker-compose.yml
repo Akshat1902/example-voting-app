@@ -13,7 +13,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: "trust"
 
   voter:
-    image: akshat1711/vote-app
+    image: akshat1902/vote-app
     container_name: vote 
     ports:
       - "5000:80"
@@ -21,7 +21,7 @@ services:
       - "redis:redis"
 
   result:
-    image: akshat1711/result-app
+    image: akshat1902/result-app
     container_name: result
     ports:
       - "5001:80"

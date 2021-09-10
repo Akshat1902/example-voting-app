@@ -21,23 +21,17 @@ pipeline{
             }
           }
         }
-        // stage('Build images by dockerfiles'){
-        //     steps{
-        //         dir('vote')
-        //         sh 'pwd'
-        //         sh 'docker build -t akshat1711/vote-app .'
-        //         sh 'cd ..'
-        //         sh 'cd result'
-        //         sh 'docker build -t akshat1711/result-app .'
-        //         sh 'cd ..'
-        //     }
-        // }
+        stage('Build images by dockerfiles'){
+            steps{
+                sh '/var/lib/jenkins/workspace/Voting_project/buildImages.sh'
+            }
+        }
 
-        // stage('Remove old containers if any'){
-        //     steps{
-        //         sh 'docker rm redis db vote worker result'
-        //     }
-        // }
+        stage('Remove old containers if any'){
+            steps{
+                sh 'docker rm redis db vote worker result'
+            }
+        }
         
         stage('Run Docker Compose'){
             steps{
