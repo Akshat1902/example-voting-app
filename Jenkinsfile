@@ -23,7 +23,7 @@ pipeline{
         }
         stage('Build images by dockerfiles'){
             steps{
-                sh '/var/lib/jenkins/workspace/Voting_project/buildImages.sh'
+                sh './buildImages.sh'
             }
         }
 
