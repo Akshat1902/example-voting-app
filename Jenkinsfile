@@ -23,9 +23,9 @@ pipeline{
         }
         stage('Build images by dockerfiles'){
             steps{
-                echo "Removing old containers if any"
-                sh 'docker rm redis db vote worker result'
                 sh './buildImages.sh'
+                echo "Removing old containers if any"
+                sh 'docker rm -f redis db vote worker result'
             }
         }
         
