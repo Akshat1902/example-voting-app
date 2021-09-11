@@ -7,9 +7,9 @@ cd result
 docker build -t akshat1902/result-app .
 docker push akshat1902/result-app
 
-cd ..
-cd worker
-docker build -t akshat1902/worker-app .
-docker push akshat1902/worker-app
+# cd ..
+# cd worker
+# docker build -t akshat1902/worker-app .
+# docker push akshat1902/worker-app
 
 cd ..

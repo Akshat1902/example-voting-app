@@ -30,7 +30,7 @@ services:
       - "db:db"
       
   worker:
-    image: akshat1902/worker-app
+    image: prabhavagrawal/worker-app
     container_name: worker 
     links:
       - "redis:redis"
