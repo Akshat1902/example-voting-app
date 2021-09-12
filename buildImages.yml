@@ -15,3 +15,8 @@
   - name: Build images and push to docker hub
     shell:
       "./buildImages.sh"
+    register: build_image_output
+
+  - name: check build image output
+    debug:
+      msg: "{{  build_image_output }}"
