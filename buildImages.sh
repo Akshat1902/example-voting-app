@@ -1,5 +1,5 @@
 echo "Building all Dockerfiles"
-cd vote
+cd /home/azureuser/example-voting-app/vote/
 docker build -t akshat1902/vote-app .
 docker login -u "akshat1902" -p "Akshat@2417" docker.io
 docker push akshat1902/vote-app
