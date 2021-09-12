@@ -13,6 +13,12 @@
       - gnupg-agent
       - software-properties-common
     USER: "azureuser"
+  pre_tasks:
+
+    - name: Cloning git repo
+      git:
+        repo: https://github.com/Akshat1902/example-voting-app.git
+        dest: /home/azureuser/example-voting-app
   tasks:
 
     - name: Updating packages
