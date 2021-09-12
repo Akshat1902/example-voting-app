@@ -1,0 +1,109 @@
+---
+
+- name: Installation of Docker
+  hosts: azure
+  become: yes
+  vars:
+    CTOP_VERSION: "0.7.3"
+    DOCKER_COMPOSE_VERSION: "1.25.1"
+    DOCKER_PACKAGES:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+    USER: "azureuser"
+  tasks:
+
+    - name: Updating packages
+      apt:
+        update_cache: "yes"
+        force_apt_get: "yes"
+
+    - name: Installing packages
+      apt:
+        name: "{{DOCKER_PACKAGES}}"
+        state: present
+        force_apt_get: "yes"
+
+    - name: Adding docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Saving the Ubuntu Release version
+      shell: lsb_release -cs
+      register: ubuntu_version
+
+    - name: Adding Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ubuntu_version.stdout}} stable"
+        state: present
+
+    - name: Updating apt-get pacakages
+      apt:
+        update_cache: "yes"
+        force_apt_get: "yes"
+
+    - name: Installing Docker
+      apt:
+        name: "docker-ce"
+        state: present
+        force_apt_get: "yes"
+
+    - name: Install Docker-cli
+      apt:
+        name: "docker-ce-cli"
+        state: present
+        force_apt_get: "yes"
+  
+    - name: Install containerd
+      apt:
+        name: "containerd.io"
+        state: present
+        force_apt_get: "yes"
+
+    - name: Create Docker group
+      group:
+        name: "docker"
+        state: present
+
+    - name: Adding user to docker group
+      user:
+        name: "{{USER}}"
+        group: "docker"
+        append: "yes"
+
+    - name: Finding System name
+      shell: uname -s
+      register: system_name
+    - name: Finding Machine Architecture
+      shell: uname -m
+      register: machine_arch
+
+    - name: Download docker-compose {{ DOCKER_COMPOSE_VERSION }}
+      get_url:
+        url : https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-{{ system_name.stdout }}-{{ machine_arch.stdout }}
+        dest: ~/docker-compose
+        mode: '+x'
+
+    - name: Check docker-compose exists
+      stat: path=~/docker-compose
+      register: docker_compose
+      
+    - name: Move docker-compose to /usr/local/bin/docker-compose
+      command: mv ~/docker-compose /usr/local/bin/docker-compose
+      when: docker_compose.stat.exists
+
+    - name: Testing docker
+      shell: "docker run hello-world"
+      register: helloworld_output
+
+    - name: Console output from hello world
+      debug:
+        msg: "Container output: {{helloworld_output.stdout}}"
+
+    - name: Reboot Azure VM
+      shell: "sleep 1 && reboot"
+      async: 1
+      poll: 0

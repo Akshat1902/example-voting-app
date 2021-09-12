@@ -1,0 +1,2 @@
+[azure]
+20.110.40.208 ansible_connection=ssh ansible_ssh_user=azureuser ansible_ssh_pass=password123

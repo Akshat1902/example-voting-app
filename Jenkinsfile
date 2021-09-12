@@ -1,6 +1,12 @@
 pipeline{
     agent any
     stages{
+        stage('Checkout SCM'){
+            steps{
+                git url: 'https://github.com/Akshat1902/Project-test.git'
+            }
+        }
+
         stage('SonarQube analysis') {
          steps {
             script {
@@ -15,19 +21,23 @@ pipeline{
             }
           }
         }
+
+        stage('Install Docker and Docker-compose'){
+            steps{
+                sh 'ansible-playbook -i hosts azure-docker.yml'
+                sh 'sleep 45'
+            }
+        }
+        
         stage('Build images by dockerfiles'){
             steps{
-                sh './buildImages.sh'
-                echo "Removing old containers if any"
-                sh 'docker rm -f redis db vote worker result'
+                sh 'ansible-playbook -i hosts buildImages.yml'
             }
         }
         
         stage('Run Docker Compose'){
             steps{
-                echo "Running Job: ${env.JOB_NAME}\n build: ${env.BUILD_ID}"
-                sh 'docker-compose up -d'
-                sh 'docker ps -a'
+                sh 'ansible-playbook -i hosts runContainers.yml'
             }
         }
     }
